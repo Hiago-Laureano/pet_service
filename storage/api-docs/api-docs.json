@@ -1,0 +1,1682 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Documentação da API",
+        "description": "Documentação apresentando todos endpoints desta API. Contém informações de autenticação, corpo da requisição e respostas.",
+        "contact": {
+            "email": "hiagolaureano@hotmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api"
+        }
+    ],
+    "paths": {
+        "/v1/login": {
+            "post": {
+                "tags": [
+                    "/v1/auth"
+                ],
+                "summary": "Logout",
+                "description": "Invalidar token de autenticação",
+                "operationId": "491a2f856b60e7f363bacb7ecf025bcb",
+                "responses": {
+                    "204": {
+                        "description": "Sucesso, sem corpo de resposta"
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/auth": {
+            "post": {
+                "tags": [
+                    "/v1/auth"
+                ],
+                "summary": "Login",
+                "description": "Fazer autenticação",
+                "operationId": "db547d6034d28f50e03328eb3dd9e593",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "e-mail",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Senha",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "Token para autenticações",
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "description": "Nome",
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "description": "E-mail",
+                                            "type": "string",
+                                            "format": "email"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Login incorreto",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo email é obrigatório. (+ 1 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo email é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo password é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pets": {
+            "get": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Obter lista de pets",
+                "description": "Retorna uma lista com todos pets",
+                "operationId": "1dc316bd42f20e9cb638b9ff896a5207",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da paginação dos dados. São 15 registros por paginação",
+                        "style": "form",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Dados da requisição",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Pet"
+                                            }
+                                        },
+                                        "links": {
+                                            "description": "Links da paginação",
+                                            "type": "object",
+                                            "example": {
+                                                "first": "http:localhost/api/v1/item?page=1",
+                                                "last": "http:localhost/api/v1/item?page=3",
+                                                "prev": "http:localhost/api/v1/item?page=1",
+                                                "next": "http:localhost/api/v1/item?page=3"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Registrar novo pet",
+                "description": "Cria um novo pet",
+                "operationId": "62c0a1366755b71f4c9ce2a350ec52c8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "species",
+                                    "breed",
+                                    "weight",
+                                    "gender",
+                                    "agressive"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário dono, se não for fornecido, será atribuído o usuário logado",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "species": {
+                                        "description": "Espécie",
+                                        "type": "string"
+                                    },
+                                    "breed": {
+                                        "description": "Raça",
+                                        "type": "string"
+                                    },
+                                    "weight": {
+                                        "description": "Peso",
+                                        "type": "numeric"
+                                    },
+                                    "age": {
+                                        "description": "Idade",
+                                        "type": "integer"
+                                    },
+                                    "gender": {
+                                        "description": "Sexo, 'M' para macho e 'F' para fêmea",
+                                        "type": "string"
+                                    },
+                                    "agressive": {
+                                        "description": "Se é agressivo",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Novo registro criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pets/{id}": {
+            "get": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Obter pet específico",
+                "description": "Retorna um pet específico",
+                "operationId": "34506e6ac6bafad9527e6cce556a7861",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do pet",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Deletar pet",
+                "description": "Deleta um pet",
+                "operationId": "777367a2533a32f1a588724c95219ca9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do pet",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sucesso, sem corpo de resposta"
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/pets{id}": {
+            "put": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Atualizar pet",
+                "description": "Atualiza todos os dados de um pet",
+                "operationId": "738f88d10473fe2a9bf9e398d264f445",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do pet",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "species",
+                                    "breed",
+                                    "weight",
+                                    "gender",
+                                    "agressive"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário dono, se não for fornecido, será atribuído o usuário logado",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "species": {
+                                        "description": "Espécie",
+                                        "type": "string"
+                                    },
+                                    "breed": {
+                                        "description": "Raça",
+                                        "type": "string"
+                                    },
+                                    "weight": {
+                                        "description": "Peso",
+                                        "type": "numeric"
+                                    },
+                                    "age": {
+                                        "description": "Idade",
+                                        "type": "integer"
+                                    },
+                                    "gender": {
+                                        "description": "Sexo, 'M' para macho e 'F' para fêmea",
+                                        "type": "string"
+                                    },
+                                    "agressive": {
+                                        "description": "Se é agressivo",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "/v1/pets"
+                ],
+                "summary": "Atualizar parcialmente pet",
+                "description": "Atualiza parcialmente os dados de um pet",
+                "operationId": "60664acda64e9050d2d6de3b9af1617e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do pet",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário dono, se não for fornecido, será atribuído o usuário logado",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "species": {
+                                        "description": "Espécie",
+                                        "type": "string"
+                                    },
+                                    "breed": {
+                                        "description": "Raça",
+                                        "type": "string"
+                                    },
+                                    "weight": {
+                                        "description": "Peso",
+                                        "type": "numeric"
+                                    },
+                                    "age": {
+                                        "description": "Idade",
+                                        "type": "integer"
+                                    },
+                                    "gender": {
+                                        "description": "Sexo, 'M' para macho e 'F' para fêmea",
+                                        "type": "string"
+                                    },
+                                    "agressive": {
+                                        "description": "Se é agressivo",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x deve ser um inteiro. (+ 2 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x deve ser um inteiro."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/users": {
+            "get": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Obter lista de usuários",
+                "description": "Retorna uma lista com todos usuários",
+                "operationId": "1e366e9046d9b43b4c482a9f5a8f3f46",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da paginação dos dados. São 15 registros por paginação",
+                        "style": "form",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Dados da requisição",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "links": {
+                                            "description": "Links da paginação",
+                                            "type": "object",
+                                            "example": {
+                                                "first": "http:localhost/api/v1/item?page=1",
+                                                "last": "http:localhost/api/v1/item?page=3",
+                                                "prev": "http:localhost/api/v1/item?page=1",
+                                                "next": "http:localhost/api/v1/item?page=3"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Registrar novo usuário",
+                "description": "Cria um novo usuário",
+                "operationId": "9e68102db783652fa512181fa8cb21b7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "phone",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Sobrenome",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Número de telefone (Somente números, código do país + DDD + número)",
+                                        "type": "string",
+                                        "pattern": "5544999998888"
+                                    },
+                                    "email": {
+                                        "description": "E-mail",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Senha",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Novo registro criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Obter usuário específico",
+                "description": "Retorna um usuário específico",
+                "operationId": "7f33edb5bcfdf9c57a2058abca7760e8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Deletar usuário",
+                "description": "Deleta um usuário",
+                "operationId": "baf7273016f7db2a04dfad84dc8b1028",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sucesso, sem corpo de resposta"
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/users{id}": {
+            "put": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Atualizar usuário",
+                "description": "Atualiza todos os dados de um usuário",
+                "operationId": "641200bcfe7722a10f7c02fd33d9980b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "phone",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Sobrenome",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Número de telefone (Somente números, código do país + DDD + número)",
+                                        "type": "string",
+                                        "pattern": "5544999998888"
+                                    },
+                                    "email": {
+                                        "description": "E-mail",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Senha",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "/v1/users"
+                ],
+                "summary": "Atualizar parcialmente usuário",
+                "description": "Atualiza parcialmente os dados de um usuário",
+                "operationId": "8a06c32007c7791e1d8ec7c6d5d855c5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Sobrenome",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Número de telefone (Somente números, código do país + DDD + número)",
+                                        "type": "string",
+                                        "pattern": "5544999998888"
+                                    },
+                                    "email": {
+                                        "description": "E-mail",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Senha",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x deve ser um inteiro. (+ 2 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x deve ser um inteiro."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Pet": {
+                "title": "Pet",
+                "description": "Pet Model",
+                "properties": {
+                    "id": {
+                        "description": "Id do pet",
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "description": "Id do usuário dono do pet",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nome",
+                        "type": "string"
+                    },
+                    "species": {
+                        "description": "Espécie",
+                        "type": "string"
+                    },
+                    "breed": {
+                        "description": "Raça",
+                        "type": "string"
+                    },
+                    "weight": {
+                        "description": "Peso",
+                        "type": "number"
+                    },
+                    "age": {
+                        "description": "Idade",
+                        "type": "integer"
+                    },
+                    "gender": {
+                        "description": "Sexo, 'M' para macho e 'F' para fêmea",
+                        "type": "string",
+                        "pattern": "M"
+                    },
+                    "agressive": {
+                        "description": "Se é agressivo",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Data da criação do registro",
+                        "type": "string",
+                        "pattern": "20/12/2024 11:12:40"
+                    },
+                    "updated_at": {
+                        "description": "Data da atualização do registro",
+                        "type": "string",
+                        "pattern": "21/12/2024 11:15:30"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User Model",
+                "properties": {
+                    "id": {
+                        "description": "Id do usuário",
+                        "type": "integer"
+                    },
+                    "first_time": {
+                        "description": "Nome",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "description": "Sobrenome",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "Número de telefone",
+                        "type": "integer",
+                        "pattern": "5500999990000"
+                    },
+                    "email": {
+                        "description": "E-mail",
+                        "type": "string"
+                    },
+                    "email_verified_at": {
+                        "description": "Data de verificação do e-mail",
+                        "type": "string",
+                        "pattern": "20/12/2024 11:12:40",
+                        "nullable": true
+                    },
+                    "is_staff": {
+                        "description": "Se é membro da equipe",
+                        "type": "boolean"
+                    },
+                    "is_superuser": {
+                        "description": "Se é superusuário",
+                        "type": "boolean"
+                    },
+                    "pets": {
+                        "description": "Lista com todos os dados dos pets do usuário",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    },
+                    "created_at": {
+                        "description": "Data da criação do registro",
+                        "type": "string",
+                        "pattern": "20/12/2024 11:12:40"
+                    },
+                    "updated_at": {
+                        "description": "Data da atualização do registro",
+                        "type": "string",
+                        "pattern": "21/12/2024 11:15:30"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "/v1/auth",
+            "description": "/v1/auth"
+        },
+        {
+            "name": "/v1/pets",
+            "description": "/v1/pets"
+        },
+        {
+            "name": "/v1/users",
+            "description": "/v1/users"
+        }
+    ]
+}
