@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             "is_staff" => $this->is_staff,
             "is_superuser" => $this->is_superuser,
             "pets" => PetResource::collection($this->pets),
+            "schedulings" => SchedulingResource::collection($this->schedulings),
             "created_at" => Carbon::make($this->created_at)->format("d/m/Y H:i:s"),
             "updated_at" => Carbon::make($this->updated_at)->format("d/m/Y H:i:s")
         ];

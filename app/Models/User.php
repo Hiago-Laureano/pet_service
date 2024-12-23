@@ -23,6 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  *     @OA\Property(property="is_staff", type="boolean", description="Se é membro da equipe"),
  *     @OA\Property(property="is_superuser", type="boolean", description="Se é superusuário"),
  *     @OA\Property(property="pets", type="array", description="Lista com todos os dados dos pets do usuário", @OA\items(ref="#/components/schemas/Pet")),
+ *     @OA\Property(property="schedulings", type="array", description="Lista com todos os dados dos agendamentos do usuário", @OA\items(ref="#/components/schemas/Scheduling")),
  *     @OA\Property(property="created_at", type="string", pattern="20/12/2024 11:12:40", description="Data da criação do registro"),
  *     @OA\Property(property="updated_at", type="string", pattern="21/12/2024 11:15:30", description="Data da atualização do registro"),
  * )
@@ -72,6 +73,11 @@ class User extends Authenticatable
     }
 
     protected function pets(): HasMany
+    {
+        return $this->hasMany(Pet::class);
+    }
+
+    protected function schedulings(): HasMany
     {
         return $this->hasMany(Pet::class);
     }

@@ -191,7 +191,10 @@ return [
 
     'attributes' => [
         "first_name" => "first_name", 
-        "last_name" => "last_name"
+        "last_name" => "last_name",
+        "user_id" => "user_id",
+        "pet_id" => "pet_id",
+        "service_id" => "service_id"
     ],
 
 ];

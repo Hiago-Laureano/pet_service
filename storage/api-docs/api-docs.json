@@ -14,14 +14,14 @@
         }
     ],
     "paths": {
-        "/v1/login": {
+        "/v1/logout": {
             "post": {
                 "tags": [
                     "/v1/auth"
                 ],
                 "summary": "Logout",
                 "description": "Invalidar token de autenticação",
-                "operationId": "491a2f856b60e7f363bacb7ecf025bcb",
+                "operationId": "68e045e81c2e61bd1f80df0906f87951",
                 "responses": {
                     "204": {
                         "description": "Sucesso, sem corpo de resposta"
@@ -613,7 +613,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Usuário atualizado",
+                        "description": "Registro atualizado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -772,7 +772,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Usuário atualizado",
+                        "description": "Registro atualizado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -798,6 +798,1294 @@
                     },
                     "403": {
                         "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x deve ser um inteiro. (+ 2 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x deve ser um inteiro."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/schedulings": {
+            "get": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Obter lista de agendamentos",
+                "description": "Retorna uma lista com todos agendamentos",
+                "operationId": "8451daa8a9b5945a62b846efc0f85d46",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da paginação dos dados. São 15 registros por paginação",
+                        "style": "form",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Dados da requisição",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Scheduling"
+                                            }
+                                        },
+                                        "links": {
+                                            "description": "Links da paginação",
+                                            "type": "object",
+                                            "example": {
+                                                "first": "http:localhost/api/v1/item?page=1",
+                                                "last": "http:localhost/api/v1/item?page=3",
+                                                "prev": "http:localhost/api/v1/item?page=1",
+                                                "next": "http:localhost/api/v1/item?page=3"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Registrar novo agendamento",
+                "description": "Cria um novo agendamento",
+                "operationId": "43d593221f9236166ec7fe9ac6059ca0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pet_id",
+                                    "service_id",
+                                    "date",
+                                    "finished"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário",
+                                        "type": "integer"
+                                    },
+                                    "pet_id": {
+                                        "description": "Id do pet",
+                                        "type": "integer"
+                                    },
+                                    "service_id": {
+                                        "description": "Id do serviço",
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "description": "Data do agendamento",
+                                        "type": "string",
+                                        "pattern": "2024/12/11 11:12:40"
+                                    },
+                                    "finished": {
+                                        "description": "Se o agendamento foi finalizado",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Novo registro criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Scheduling"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/schedulings/{id}": {
+            "get": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Obter agendamento específico",
+                "description": "Retorna um agendamento específico",
+                "operationId": "3d1716ba578ec8fec7bb8f7182645c9e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Scheduling"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Deletar agendamento",
+                "description": "Deleta um agendamento",
+                "operationId": "57d66252222e6db984950c97ffa97850",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sucesso, sem corpo de resposta"
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/schedulings{id}": {
+            "put": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Atualizar agendamento",
+                "description": "Atualiza todos os dados de um agendamento",
+                "operationId": "5036f02467567548956ad856a9e23894",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pet_id",
+                                    "service_id",
+                                    "date",
+                                    "finished"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário",
+                                        "type": "integer"
+                                    },
+                                    "pet_id": {
+                                        "description": "Id do pet",
+                                        "type": "integer"
+                                    },
+                                    "service_id": {
+                                        "description": "Id do serviço",
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "description": "Data do agendamento",
+                                        "type": "string",
+                                        "pattern": "2024/12/11 11:12:40"
+                                    },
+                                    "finished": {
+                                        "description": "Se o agendamento foi finalizado",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registro atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Scheduling"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "/v1/schedulings"
+                ],
+                "summary": "Atualizar parcialmente agendamento",
+                "description": "Atualiza parcialmente os dados de um agendamento",
+                "operationId": "67599748ebedba13f8220932fdbfa360",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do agendamento",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "description": "Id do usuário",
+                                        "type": "integer"
+                                    },
+                                    "pet_id": {
+                                        "description": "Id do pet",
+                                        "type": "integer"
+                                    },
+                                    "service_id": {
+                                        "description": "Id do serviço",
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "description": "Data do agendamento",
+                                        "type": "string",
+                                        "pattern": "2024/12/11 11:12:40"
+                                    },
+                                    "finished": {
+                                        "description": "Se o agendamento foi finalizado",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registro atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Scheduling"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente o propretário do registro e superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x deve ser um inteiro. (+ 2 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x deve ser um inteiro."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/services": {
+            "get": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Obter lista de serviços",
+                "description": "Retorna uma lista com todos serviços",
+                "operationId": "64cafc95697e978a04e86d1e9de5be66",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da paginação dos dados. São 15 registros por paginação",
+                        "style": "form",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "Dados da requisição",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Service"
+                                            }
+                                        },
+                                        "links": {
+                                            "description": "Links da paginação",
+                                            "type": "object",
+                                            "example": {
+                                                "first": "http:localhost/api/v1/item?page=1",
+                                                "last": "http:localhost/api/v1/item?page=3",
+                                                "prev": "http:localhost/api/v1/item?page=1",
+                                                "next": "http:localhost/api/v1/item?page=3"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Registrar novo serviço",
+                "description": "Cria um novo serviço",
+                "operationId": "f7c720b1d50dce64407b53427c5c0786",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Preço",
+                                        "type": "numeric"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Novo registro criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Service"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/services/{id}": {
+            "get": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Obter serviço específico",
+                "description": "Retorna um serviço específico",
+                "operationId": "dc2b9bdaa2bf50851033196b360f1650",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do serviço",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Service"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Deletar serviço",
+                "description": "Deleta um serviço",
+                "operationId": "cb2d1bc46085bc7a53e5c5b55e9f7498",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do serviço",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sucesso, sem corpo de resposta"
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/services{id}": {
+            "put": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Atualizar serviço",
+                "description": "Atualiza todos os dados de um serviço",
+                "operationId": "298ac8138e4b06699067df490c2fe83c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do serviço",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Preço",
+                                        "type": "numeric"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registro atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Service"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Registro não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "420": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "pattern": "O campo x é obrigatório. (+ 3 erros)"
+                                        },
+                                        "errors": {
+                                            "description": "Campos com erro de validação e lista dos erros",
+                                            "type": "object",
+                                            "example": {
+                                                "campo_x": [
+                                                    "O campo x é obrigatório."
+                                                ],
+                                                "campo_y": [
+                                                    "O campo y deve ser um inteiro."
+                                                ],
+                                                "campo_z": [
+                                                    "O campo z deve ter no máximo 30 caracteres."
+                                                ],
+                                                "campo_w": [
+                                                    "O campo w é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "/v1/services"
+                ],
+                "summary": "Atualizar parcialmente serviço",
+                "description": "Atualiza parcialmente os dados de um serviço",
+                "operationId": "d749c9560116c529d4806b571b5d155f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id do serviço",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Preço",
+                                        "type": "numeric"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registro atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Login necessário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Somente superusuários possuem essa permissão",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1298,7 +2586,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Usuário atualizado",
+                        "description": "Registro atualizado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1448,7 +2736,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Usuário atualizado",
+                        "description": "Registro atualizado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1574,7 +2862,8 @@
                     },
                     "age": {
                         "description": "Idade",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "gender": {
                         "description": "Sexo, 'M' para macho e 'F' para fêmea",
@@ -1584,6 +2873,77 @@
                     "agressive": {
                         "description": "Se é agressivo",
                         "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Data da criação do registro",
+                        "type": "string",
+                        "pattern": "20/12/2024 11:12:40"
+                    },
+                    "updated_at": {
+                        "description": "Data da atualização do registro",
+                        "type": "string",
+                        "pattern": "21/12/2024 11:15:30"
+                    }
+                },
+                "type": "object"
+            },
+            "Scheduling": {
+                "title": "Scheduling",
+                "description": "Scheduling Model",
+                "properties": {
+                    "id": {
+                        "description": "Id do agendamento",
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "description": "Id do usuário",
+                        "type": "integer"
+                    },
+                    "pet_id": {
+                        "description": "Id do pet",
+                        "type": "integer"
+                    },
+                    "service_id": {
+                        "description": "Id do serviço",
+                        "type": "integer"
+                    },
+                    "date": {
+                        "description": "Data do agendamento",
+                        "type": "string",
+                        "pattern": "2024/12/11 11:12:40"
+                    },
+                    "finished": {
+                        "description": "Se o agendamento foi finalizado",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Data da criação do registro",
+                        "type": "string",
+                        "pattern": "20/12/2024 11:12:40"
+                    },
+                    "updated_at": {
+                        "description": "Data da atualização do registro",
+                        "type": "string",
+                        "pattern": "21/12/2024 11:15:30"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "title": "Service",
+                "description": "Service Model",
+                "properties": {
+                    "id": {
+                        "description": "Id do serviço",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nome",
+                        "type": "string"
+                    },
+                    "price": {
+                        "description": "Preço",
+                        "type": "number"
                     },
                     "created_at": {
                         "description": "Data da criação do registro",
@@ -1644,6 +3004,13 @@
                             "$ref": "#/components/schemas/Pet"
                         }
                     },
+                    "schedulings": {
+                        "description": "Lista com todos os dados dos agendamentos do usuário",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Scheduling"
+                        }
+                    },
                     "created_at": {
                         "description": "Data da criação do registro",
                         "type": "string",
@@ -1673,6 +3040,14 @@
         {
             "name": "/v1/pets",
             "description": "/v1/pets"
+        },
+        {
+            "name": "/v1/schedulings",
+            "description": "/v1/schedulings"
+        },
+        {
+            "name": "/v1/services",
+            "description": "/v1/services"
         },
         {
             "name": "/v1/users",

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Pet;
+use App\Models\Scheduling;
 use App\Models\Service;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,5 +19,6 @@ class DatabaseSeeder extends Seeder
         User::factory(4)->create();
         Pet::factory(10)->create();
         Service::factory(3)->create();
+        Scheduling::factory(3)->create();
     }
 }
