@@ -27,22 +27,21 @@ class StoreUpdateUserRequest extends FormRequest
             "last_name" => ["required", "min:3", "max:50"],
             "phone" => ["required", "min_digits:12", "max_digits:13", "integer"],
             "email" => ["required", "email", "min:8", "max:100", Rule::unique("users")],
-            "password" => ["required", "min:8", "max:100"]
+            "password" => ["required", "min:8", "max:100"],
+            "is_staff" => ["nullable", "boolean"],
+            "is_superuser" => ["nullable", "boolean"]
         ];
 
         if($this->method() === "PUT"){
             $rules["email"] = ["required", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->email)];
-            $rules["is_staff"] = ["nullable", "boolean"];
-            $rules["is_superuser"] = ["nullable", "boolean"];
+
         }
         if($this->method() === "PATCH"){
+            $rules["email"] = ["nullable", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->email)];
             $rules["first_name"] = ["nullable", "min:3", "max:50"];
             $rules["last_name"] = ["nullable", "min:3", "max:50"];
             $rules["phone"] = ["nullable", "min_digits:12", "max_digits:13", "integer"];
-            $rules["email"] = ["nullable", "email", "min:8", "max:100", Rule::unique("users")];
             $rules["password"] = ["nullable", "min:8", "max:100"];
-            $rules["is_staff"] = ["nullable", "boolean"];
-            $rules["is_superuser"] = ["nullable", "boolean"];
         }
         return $rules;
     }
