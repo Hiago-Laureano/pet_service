@@ -53,6 +53,11 @@ php artisan key:generate
 php artisan migrate
 ```
 
+### Gere a documentação da API
+```sh
+php artisan l5-swagger:generate
+```
+
 ### Acessar a API
 
 A API estará rodando no http://localhost
