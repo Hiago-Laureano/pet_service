@@ -27,4 +27,9 @@ class Permissions
     {
         return ($user->is_superuser ? true : false) or ($user->id === Scheduling::find($schedulingId)->user_id ? true : false);
     }
+
+    public static function IsStaff(User $user): bool
+    {
+        return $user->is_staff;
+    }
 }
