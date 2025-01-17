@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\MedicalRecordController;
 use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\PetController;
 use App\Http\Controllers\v1\AuthController;
@@ -12,6 +13,8 @@ Route::prefix("v1")->group(function() {
     Route::apiResource("/pets", PetController::class);
     Route::apiResource("/services", ServiceController::class);
     Route::apiResource("/schedulings", SchedulingController::class);
+    Route::get("/medicalrecords/result", [MedicalRecordController::class, "result"]);
+    Route::apiResource("/medicalrecords", MedicalRecordController::class);
     Route::post("/auth", [AuthController::class, "login"]);
     Route::post("/logout", [AuthController::class, "logout"]);
 });

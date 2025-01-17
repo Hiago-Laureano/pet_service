@@ -27,6 +27,7 @@ beforeEach(function(){
         "age",
         "gender",
         "agressive",
+        "medical_records",
         "created_at",
         "updated_at"
     ];

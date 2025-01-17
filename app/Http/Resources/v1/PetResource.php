@@ -25,6 +25,7 @@ class PetResource extends JsonResource
             "age" => $this->age,
             "gender" => $this->gender,
             "agressive" => $this->agressive,
+            "medical_records" => MedicalRecordResource::collection($this->medicalRecords),
             "created_at" => Carbon::make($this->created_at)->format("d/m/Y H:i:s"),
             "updated_at" => Carbon::make($this->updated_at)->format("d/m/Y H:i:s")
         ];

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MedicalRecord;
 use App\Models\Pet;
 use App\Models\Scheduling;
 use App\Models\Service;
@@ -16,9 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(4)->create();
-        Pet::factory(10)->create();
-        Service::factory(3)->create();
-        Scheduling::factory(3)->create();
+        User::factory(5)->create();
+        Pet::factory(15)->create();
+        Service::factory(5)->create();
+        Scheduling::factory(5)->create();
+        MedicalRecord::factory(5)->create();
     }
 }
