@@ -28,11 +28,11 @@ class StoreUpdateServiceRequest extends FormRequest
         ];
 
         if($this->method() === "PUT"){
-            $rules["name"] = ["required", "min:2", "max:255", Rule::unique("services")->ignore($this->id)];
+            $rules["name"] = ["required", "min:2", "max:255", Rule::unique("services")->ignore($this->user()->id)];
         }
 
         if($this->method() === "PATCH"){
-            $rules["name"] = ["nullable", "min:2", "max:255", Rule::unique("services")->ignore($this->id)];
+            $rules["name"] = ["nullable", "min:2", "max:255", Rule::unique("services")->ignore($this->user()->id)];
             $rules["price"] = ["nullable", "numeric", "max:100000"];
         }
         return $rules;

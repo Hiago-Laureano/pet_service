@@ -33,11 +33,11 @@ class StoreUpdateUserRequest extends FormRequest
         ];
 
         if($this->method() === "PUT"){
-            $rules["email"] = ["required", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->email)];
+            $rules["email"] = ["required", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->user()->id)];
 
         }
         if($this->method() === "PATCH"){
-            $rules["email"] = ["nullable", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->email)];
+            $rules["email"] = ["nullable", "email", "min:8", "max:100", Rule::unique("users")->ignore($this->user()->id)];
             $rules["first_name"] = ["nullable", "min:3", "max:50"];
             $rules["last_name"] = ["nullable", "min:3", "max:50"];
             $rules["phone"] = ["nullable", "min_digits:12", "max_digits:13", "integer"];
