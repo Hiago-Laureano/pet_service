@@ -34,7 +34,7 @@ class ServiceController extends Controller implements HasMiddleware
      *         name="page",
      *         in="query",
      *         description="Número da paginação dos dados. São 15 registros por paginação",
-     *         @OA\Schema(type="int"),
+     *         @OA\Schema(type="integer"),
      *         style="form"
      *     ),
      *     @OA\Response(
@@ -89,10 +89,11 @@ class ServiceController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do serviço",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -199,10 +200,11 @@ class ServiceController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do serviço",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -263,10 +265,11 @@ class ServiceController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do serviço",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -337,10 +340,11 @@ class ServiceController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do serviço",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\Response(
      *         response=204,

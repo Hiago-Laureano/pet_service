@@ -33,7 +33,7 @@ class UserController extends Controller implements HasMiddleware
      *         name="page",
      *         in="query",
      *         description="Número da paginação dos dados. São 15 registros por paginação",
-     *         @OA\Schema(type="int"),
+     *         @OA\Schema(type="integer"),
      *         style="form"
      *     ),
      *     @OA\Response(
@@ -88,10 +88,11 @@ class UserController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do usuário",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -198,10 +199,11 @@ class UserController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do usuário",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -265,10 +267,11 @@ class UserController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do usuário",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -342,10 +345,11 @@ class UserController extends Controller implements HasMiddleware
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
-     *         in="query",
+     *         in="path",
      *         description="Id do usuário",
      *         required=true,
-     *         @OA\Schema(type="int")
+     *         @OA\Schema(type="integer"),
+     *         style="form"
      *     ),
      *     @OA\Response(
      *         response=204,

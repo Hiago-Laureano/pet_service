@@ -170,7 +170,7 @@
                         "description": "Número da paginação dos dados. São 15 registros por paginação",
                         "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -438,11 +438,11 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do prontuário médico",
                         "required": true,
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -583,11 +583,11 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do prontuário médico",
                         "required": true,
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -727,11 +727,11 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do prontuário médico",
                         "required": true,
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -869,7 +869,7 @@
                         "description": "Número da paginação dos dados. São 15 registros por paginação",
                         "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1093,11 +1093,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do pet",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1174,11 +1175,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do pet",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1250,11 +1252,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do pet",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1417,11 +1420,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do pet",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1579,7 +1583,7 @@
                         "description": "Número da paginação dos dados. São 15 registros por paginação",
                         "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1775,11 +1779,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do agendamento",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1856,11 +1861,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do agendamento",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1932,11 +1938,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do agendamento",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2086,11 +2093,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do agendamento",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2237,7 +2245,7 @@
                         "description": "Número da paginação dos dados. São 15 registros por paginação",
                         "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2433,11 +2441,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do serviço",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2514,11 +2523,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do serviço",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2590,11 +2600,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do serviço",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2729,11 +2740,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do serviço",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -2867,7 +2879,7 @@
                         "description": "Número da paginação dos dados. São 15 registros por paginação",
                         "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -3076,11 +3088,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do usuário",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -3157,11 +3170,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do usuário",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -3233,11 +3247,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do usuário",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -3390,11 +3405,12 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Id do usuário",
                         "required": true,
+                        "style": "form",
                         "schema": {
-                            "type": "int"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -3609,6 +3625,13 @@
                     "agressive": {
                         "description": "Se é agressivo",
                         "type": "boolean"
+                    },
+                    "medical_records": {
+                        "description": "Lista com todos os dados dos prontuários médicos do pet",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MedicalRecord"
+                        }
                     },
                     "created_at": {
                         "description": "Data da criação do registro",
