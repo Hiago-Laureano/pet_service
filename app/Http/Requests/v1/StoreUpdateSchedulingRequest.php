@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdateSchedulingRequest extends FormRequest
 {
@@ -22,16 +23,16 @@ class StoreUpdateSchedulingRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            "user_id" => ["nullable", "integer"],
-            "pet_id" => ["required", "integer"],
-            "service_id" => ["required", "integer"],
+            "user_id" => ["nullable", "integer", Rule::exists("users", "id")],
+            "pet_id" => ["required", "integer", Rule::exists("pets", "id")],
+            "service_id" => ["required", "integer", Rule::exists("services", "id")],
             "date" => ["required", "date_format:Y-m-d H:i:s"],
             "finished" => ["nullable", "boolean"]
         ];
 
         if($this->method() === "PATCH"){
-            $rules["pet_id"] = ["nullable", "integer"];
-            $rules["service_id"] = ["nullable", "integer"];
+            $rules["pet_id"] = ["nullable", "integer", Rule::exists("pets", "id")];
+            $rules["service_id"] = ["nullable", "integer", Rule::exists("services", "id")];
             $rules["date"] = ["nullable", "date_format:Y-m-d H:i:s"];
         }
 

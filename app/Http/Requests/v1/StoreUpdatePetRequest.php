@@ -23,7 +23,7 @@ class StoreUpdatePetRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            "user_id" => ["nullable", "integer"],
+            "user_id" => ["nullable", "integer", Rule::exists("users", "id")],
             "name" => ["required", "min:3", "max:100"],
             "species" => ["required", "min:3", "max:100"],
             "breed" => ["required", "min:3", "max:50"],
