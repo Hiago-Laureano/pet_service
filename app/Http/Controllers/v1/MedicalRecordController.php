@@ -5,7 +5,9 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreUpdateMedicalRecordRequest;
 use App\Http\Resources\v1\MedicalRecordResource;
+use App\Jobs\MedicalRecordJob;
 use App\Models\MedicalRecord;
+use App\Models\User;
 use App\Services\Permissions;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -224,6 +226,7 @@ class MedicalRecordController extends Controller implements HasMiddleware
         $data = $request->validated();
         $data["access_code"] = fake()->unique()->regexify("[A-Za-z0-9]{60}");
         $mr = MedicalRecord::create($data);
+        MedicalRecordJob::dispatch(user: User::find($mr->user_id), accessCode: $mr->access_code);
         return new MedicalRecordResource($mr);
     }
     

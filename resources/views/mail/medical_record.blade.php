@@ -1,0 +1,1 @@
+{{ $data["msg"] . " " . $data["access_code"]}}
